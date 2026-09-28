@@ -67,4 +67,6 @@ type ReconciliationConfig struct {
 	Enabled           bool
 	Interval          time.Duration
 	ToleranceStroops  int64 // max allowed drift before alert
+	DriftAlertThresholdUSD float64 // dollar amount threshold for immediate page on mainnet
+	IsMainnet              bool    // whether network is mainnet
 }

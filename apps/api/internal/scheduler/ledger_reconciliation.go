@@ -13,6 +13,10 @@ import (
 )
 
 // LedgerReconciliationDeps holds dependencies for the reconciliation job.
+import (
+	"github.com/suncrestlabs/nester/apps/api/internal/reconciliation"
+)
+
 type LedgerReconciliationDeps struct {
 	LedgerRepo   ledger.Repository
 	VaultLister  ReconciliationVaultLister // reuses existing vault lister
@@ -193,7 +197,7 @@ func (j *LedgerReconciliationJob) reconcileVault(ctx context.Context, v Reconcil
 	}
 
 	if status == "drift" {
-		// Raise alert — for now log as error; in production would send to alerting system
+		// Raise alert — log as error and dispatch via pager alerter if mainnet and threshold exceeded
 		j.logger.Error("ledger reconciliation drift beyond tolerance — alerting, not auto-correcting",
 			"vault_id", v.ID,
 			"ledger", ledgerPoolBal,
@@ -201,6 +205,25 @@ func (j *LedgerReconciliationJob) reconcileVault(ctx context.Context, v Reconcil
 			"difference", absDiff,
 			"tolerance", tolerance,
 		)
+		// Check dollar threshold escalation for mainnet
+		DiffDecimal := decimal.NewFromInt(absDiff)
+		Finding := reconciliation.Finding{
+			ID:         uuid.New(),
+			RunID:      uuid.New(),
+			Level:      reconciliation.LevelBalance,
+			Type:       reconciliation.TypeMismatch,
+			Severity:   reconciliation.SeverityCritical,
+			EntityType: "vault",
+			EntityID:   v.ID.String(),
+			Difference: &DiffDecimal,
+			ObservedAt: time.Now(),
+		}
+		thresholdUSD := j.cfg.DriftAlertThresholdUSD
+		if thresholdUSD <= 0 {
+			thresholdUSD = 100.0
+		}
+		pager := reconciliation.NewPagerAlerter(nil, j.logger, j.cfg.IsMainnet, thresholdUSD)
+		_ = pager.CriticalFinding(ctx, Finding)
 	} else {
 		j.logger.Debug("ledger reconciliation ok", "vault_id", v.ID, "ledger", ledgerPoolBal, "on_chain", onChainBal)
 	}
