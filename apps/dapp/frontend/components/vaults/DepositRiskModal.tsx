@@ -19,7 +19,7 @@ export const DepositRiskModal: React.FC<DepositRiskModalProps> = ({
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
       <div className="max-w-lg w-full bg-slate-900 border border-slate-800 rounded-xl p-6 text-slate-100 shadow-xl">
         <h2 className="text-xl font-bold mb-4 text-amber-400">
-          Mainnet Risk Disclosures & Terms
+          Mainnet Risk Disclosures &amp; Terms
         </h2>
         <div className="space-y-3 text-sm text-slate-300 max-h-96 overflow-y-auto pr-2 mb-6">
           <p>
@@ -37,7 +37,7 @@ export const DepositRiskModal: React.FC<DepositRiskModalProps> = ({
           </div>
           <div className="bg-slate-800/60 p-3 rounded-lg border border-slate-700/50">
             <h3 className="font-semibold text-slate-200 mb-1">
-              2. Smart Contract & DeFi Risk
+              2. Smart Contract &amp; DeFi Risk
             </h3>
             <p>
               Smart contracts and underlying yield adapters may contain bugs or
