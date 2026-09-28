@@ -1,13 +1,13 @@
-import { describe, it, expect } from "vitest";
+import { test, expect } from "@playwright/test";
 import { MAINNET_RISK_DISCLOSURES, MAINNET_TERMS_VERSION } from "@/lib/terms-and-disclosures";
 
-describe("Mainnet Terms and Risk Disclosures", () => {
-  it("defines a valid terms version", () => {
+test.describe("Mainnet Terms and Risk Disclosures", () => {
+  test("defines a valid terms version", () => {
     expect(MAINNET_TERMS_VERSION).toBeDefined();
     expect(typeof MAINNET_TERMS_VERSION).toBe("string");
   });
 
-  it("includes essential risk disclosures for mainnet deposit", () => {
+  test("includes essential risk disclosures for mainnet deposit", () => {
     expect(MAINNET_RISK_DISCLOSURES.length).toBeGreaterThanOrEqual(3);
     
     const ids = MAINNET_RISK_DISCLOSURES.map((d) => d.id);
