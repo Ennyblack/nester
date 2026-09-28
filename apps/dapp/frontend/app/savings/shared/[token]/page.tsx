@@ -138,12 +138,15 @@ export default function SharedGoalPage() {
           )}
         </div>
 
-        <p className="mt-6 text-center text-xs text-black/30 dark:text-white/30">
+        <div className="mt-6 text-center text-xs text-black/40 dark:text-white/40 space-y-1">
+          <p>By depositing funds, you agree to our Terms of Service. Funds are subject to smart contract risks, yield variability, and carry no FDIC-equivalent insurance.</p>
+          <p>
           Powered by{" "}
           <a href="/" className="underline hover:text-black dark:hover:text-white">
             Nester
           </a>
         </p>
+        </div>
       </div>
     </div>
   );
